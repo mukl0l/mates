@@ -60,7 +60,22 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
               const Spacer(flex: 2),
               const _WaveMark(),
               const SizedBox(height: 28),
-              Text('Find people who\nget your taste.', style: text.displaySmall),
+              Text.rich(
+                TextSpan(
+                  text: 'Find your people\non ',
+                  style: text.displaySmall,
+                  children: [
+                    TextSpan(
+                      text: 'Mates',
+                      style: text.displaySmall?.copyWith(
+                        fontWeight: FontWeight.bold,
+                        fontStyle: FontStyle.italic,
+                      ),
+                    ),
+                    TextSpan(text: '.', style: text.displaySmall),
+                  ],
+                ),
+              ),
               const SizedBox(height: 14),
               Text(
                 'We match on what you actually listen to, watch and read — not on a bio.',
