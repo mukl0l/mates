@@ -25,7 +25,7 @@ Two terminals.
 cd server && npm install && npm start
 ```
 
-**App** — talks to `http://localhost:4000` by default:
+**App** — talks to `http://10.0.2.2:4000` by default:
 
 ```bash
 cd app && flutter run
