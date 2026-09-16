@@ -186,6 +186,20 @@ async function cacheScore(
   );
 }
 
+/**
+ * Clears the viewer's passes so the queue can be worked through again.
+ * Likes are kept - a pass is "not now", a like is a decision.
+ */
+export async function recycleDiscovery(db: Db, viewerId: string): Promise<number> {
+  const { rows } = await db.query<{ count: string }>(
+    `SELECT count(*)::text AS count FROM swipes
+      WHERE actor_id = $1 AND direction = 'pass'`,
+    [viewerId],
+  );
+  await db.query("DELETE FROM swipes WHERE actor_id = $1 AND direction = 'pass'", [viewerId]);
+  return Number(rows[0]?.count ?? 0);
+}
+
 export interface PairCompatibility {
   user: PublicUser;
   overallScore: number;
@@ -401,6 +415,24 @@ export async function sendMessage(
     'INSERT INTO messages (id, match_id, sender_id, content) VALUES ($1,$2,$3,$4)',
     [id, matchId, senderId, trimmed],
   );
+
+  // Tell the other side something arrived.
+  const { rows: others } = await db.query<{ other_id: string }>(
+    `SELECT CASE WHEN user_a_id = $2 THEN user_b_id ELSE user_a_id END AS other_id
+       FROM matches WHERE id = $1`,
+    [matchId, senderId],
+  );
+  const otherId = others[0]?.other_id;
+  if (otherId) {
+    const { emit, nameOf } = await import('./notifications.js');
+    await emit(db, {
+      userId: otherId,
+      kind: 'message',
+      actorId: senderId,
+      target: `/chat/${matchId}`,
+      body: `${await nameOf(db, senderId)}: ${trimmed.slice(0, 60)}`,
+    });
+  }
 
   // A synthetic profile with auto_reply answers immediately (see autoReply.ts).
   const { maybeAutoReply } = await import('./autoReply.js');

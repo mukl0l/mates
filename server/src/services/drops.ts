@@ -139,6 +139,19 @@ export async function listUserDrops(
   return rows.map((r) => toDrop(r, myKeys));
 }
 
+/** Drops the viewer has saved, newest save first. */
+export async function listSaved(db: Db, viewerId: string): Promise<Drop[]> {
+  const myKeys = await myItemKeys(db, viewerId);
+  const { rows } = await db.query<Record<string, any>>(
+    `${DROP_SELECT}
+       JOIN drop_reactions saved
+         ON saved.drop_id = d.id AND saved.user_id = $1 AND saved.kind = 'save'
+      ORDER BY saved.created_at DESC`,
+    [viewerId],
+  );
+  return rows.map((r) => toDrop(r, myKeys));
+}
+
 export interface CreateDropInput {
   domain: Domain;
   itemKey: string;
@@ -203,6 +216,25 @@ export async function react(
        ON CONFLICT DO NOTHING`,
       [dropId, userId, kind],
     );
+
+    // A save is private; only a like is worth telling the author about.
+    if (kind === 'like') {
+      const { rows } = await db.query<{ user_id: string; item_label: string }>(
+        'SELECT user_id, item_label FROM drops WHERE id = $1',
+        [dropId],
+      );
+      const drop = rows[0];
+      if (drop) {
+        const { emit, nameOf } = await import('./notifications.js');
+        await emit(db, {
+          userId: drop.user_id,
+          kind: 'drop_like',
+          actorId: userId,
+          target: '/drops',
+          body: `${await nameOf(db, userId)} liked your drop of ${drop.item_label}`,
+        });
+      }
+    }
   } else {
     await db.query(
       'DELETE FROM drop_reactions WHERE drop_id = $1 AND user_id = $2 AND kind = $3',
