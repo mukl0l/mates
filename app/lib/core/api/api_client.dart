@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'api_exception.dart';
 
 /// Default API base URL per platform. An Android emulator reaches the host
-/// machine at 10.0.2.2; everything else talks to localhost. Override with:
+/// machine at 172.17.114.235; everything else talks to localhost. Override with:
 ///   flutter run --dart-define=WAVELENGTH_API_URL=https://api.example.com
 ///
 /// Uses `defaultTargetPlatform` rather than `dart:io` so the same code compiles
@@ -13,9 +13,9 @@ String _defaultBaseUrl() {
   const fromEnv = String.fromEnvironment('WAVELENGTH_API_URL');
   if (fromEnv.isNotEmpty) return fromEnv;
   if (!kIsWeb && defaultTargetPlatform == TargetPlatform.android) {
-    return 'http://10.0.2.2:4000';
+    return 'http://172.17.114.235:4000';
   }
-  return 'http://10.0.2.2:4000';
+  return 'http://172.17.114.235:4000';
 }
 
 typedef TokenReader = Future<String?> Function();
