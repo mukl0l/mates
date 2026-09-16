@@ -1,0 +1,3 @@
+tags:
+  integration:
+    description: Requires a Wavelength API server on 172.16.79.195:4000.

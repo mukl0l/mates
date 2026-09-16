@@ -13,7 +13,7 @@ import 'package:mates_app/core/api/api_exception.dart';
 /// Skips itself (rather than failing) when the server isn't up, so the default
 /// `flutter test` run stays green on a machine with no backend.
 void main() {
-  const baseUrl = 'http://172.17.114.235:4000';
+  const baseUrl = 'http://172.16.79.195:4000';
   late bool serverUp;
 
   setUpAll(() async {
@@ -112,7 +112,7 @@ void main() {
 
   test('surfaces a friendly message when the API is unreachable', () async {
     await expectLater(
-      ApiClient(baseUrl: 'http://172.17.114.235:1').get('/health'),
+      ApiClient(baseUrl: 'http://172.16.79.195:1').get('/health'),
       throwsA(isA<ApiException>()
           .having((e) => e.code, 'code', 'network_unreachable')
           .having((e) => e.message, 'message', contains("Can't reach MATES"))),

@@ -38,7 +38,7 @@ Two terminals.
 cd server && npm install && npm run seed && npm start
 ```
 
-**App** — talks to `http://172.17.114.235:4000` by default:
+**App** — talks to `http://172.16.79.195:4000` by default:
 
 ```bash
 cd app && flutter run

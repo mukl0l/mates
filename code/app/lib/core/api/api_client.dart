@@ -13,9 +13,9 @@ String _defaultBaseUrl() {
   const fromEnv = String.fromEnvironment('WAVELENGTH_API_URL');
   if (fromEnv.isNotEmpty) return fromEnv;
   if (!kIsWeb && defaultTargetPlatform == TargetPlatform.android) {
-    return 'http://172.17.114.235:4000';
+    return 'http://172.16.79.195:4000';
   }
-  return 'http://172.17.114.235:4000';
+  return 'http://172.16.79.195:4000';
 }
 
 typedef TokenReader = Future<String?> Function();
