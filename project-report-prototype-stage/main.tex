@@ -154,6 +154,17 @@ tag based Communities suggested from their taste vector.
 Figures \ref{fig:usecase} to \ref{fig:dfd2} document this
 behaviour at increasing levels of detail.
 
+Three further diagrams describe the same system from other
+angles. The activity diagram (Figure~\ref{fig:activity})
+follows a user from sign in to chat across the user, server,
+and external service lanes, including the mutual like
+decision that unlocks chat. The sequence diagram
+(Figure~\ref{fig:sequence}) shows the order of messages
+between the Flutter app, the REST API, PostgreSQL, the
+compatibility engine, and the external providers for the same
+flow. The class diagram (Figure~\ref{fig:class}) shows the
+main domain classes and services and how they relate.
+
 \clearpage
 \begin{figure}[p]
   \centering
@@ -189,6 +200,38 @@ behaviour at increasing levels of detail.
   \caption{Data flow diagram, Level 2, decomposition of the
     Compatibility Engine process.}
   \label{fig:dfd2}
+\end{figure}
+\clearpage
+
+\clearpage
+\begin{figure}[p]
+  \centering
+  \includegraphics[width=\textwidth,height=0.88\textheight,keepaspectratio]{figures/MATES_Activity_Diagram.pdf}
+  \caption{Activity diagram, from sign in and taste import
+    through discovery, connection, and chat.}
+  \label{fig:activity}
+\end{figure}
+\clearpage
+
+\clearpage
+\begin{figure}[p]
+  \centering
+  \includegraphics[width=\textwidth,height=0.88\textheight,keepaspectratio]{figures/MATES_Sequence_Diagram.pdf}
+  \caption{Sequence diagram of the core loop, showing the
+    messages exchanged between the app, the API, the
+    database, the compatibility engine, and the external
+    services.}
+  \label{fig:sequence}
+\end{figure}
+\clearpage
+
+\clearpage
+\begin{figure}[p]
+  \centering
+  \includegraphics[width=\textwidth,height=0.88\textheight,keepaspectratio]{figures/MATES_Class_Diagram.pdf}
+  \caption{Class diagram, showing the domain model and the
+    key backend services.}
+  \label{fig:class}
 \end{figure}
 \clearpage
 
@@ -645,3 +688,4 @@ reasonable place to be at the mid semester stage.
 \printbibliography[heading=bibintoc]
 
 \end{document}
+
